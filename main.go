@@ -5,6 +5,7 @@ import (
 	"io"
 	"net"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -33,7 +34,22 @@ func main() {
 			fmt.Println("error reading from client: ", err.Error())
 			os.Exit(1)
 		}
-		fmt.Printf("%+v", value)
-		writer.Write(&Value{typ: "string", str: "OK"})
+		if value.typ != "array" {
+			fmt.Println("Invalid request, expected array")
+			continue
+		}
+		if len(value.arr) == 0 {
+			fmt.Println("Invalid request, expected array length > 0")
+			continue
+		}
+		command := strings.ToUpper(value.arr[0].bulk)
+		handler, ok := Handlers[command]
+		if !ok {
+			fmt.Printf("Invalid command %q\n", command)
+			continue
+		}
+		response := handler(value.arr[1:])
+
+		writer.Write(response)
 	}
 }

@@ -129,7 +129,7 @@ func (v *Value) Marshal() []byte {
 		return v.marshalError()
 	case "bulk":
 		return v.marshalBulk()
-	case "array":
+	case "arr":
 		return v.marshalArray()
 	case "null":
 		return v.marshalNull()
