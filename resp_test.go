@@ -98,3 +98,37 @@ func TestRead(t *testing.T) {
 	}
 	fmt.Printf("%+v", value)
 }
+
+func TestMarshalString(t *testing.T) {
+	text := "saurav"
+	expected_len := len(text) + 3
+	v := Value{typ: "string", str: text}
+	bytes := v.marshalString()
+	if len(string(bytes)) != expected_len {
+		t.Errorf("expected %d , got %d", expected_len, len(string(bytes)))
+	}
+}
+
+func TestMarshalBulk(t *testing.T) {
+	value := Value{typ: "bulk", bulk: "saurav"}
+	expected_output := "$6\r\nsaurav\r\n"
+	bulk_bytes := value.marshalBulk()
+	if string(bulk_bytes) != expected_output {
+		t.Errorf("expected %q , got %q ", expected_output, string(bulk_bytes))
+	}
+}
+
+func TestMarshalArray(t *testing.T) {
+	value := Value{
+		typ: "array",
+		arr: []Value{
+			{typ: "bulk", bulk: "saurav"},
+			{typ: "bulk", bulk: "saurav"},
+		},
+	}
+	expected_output := "*2\r\n$6\r\nsaurav\r\n$6\r\nsaurav\r\n"
+	bulk_bytes := value.marshalArray()
+	if string(bulk_bytes) != expected_output {
+		t.Errorf("expected %q , got %q ", expected_output, string(bulk_bytes))
+	}
+}

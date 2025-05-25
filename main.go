@@ -25,6 +25,7 @@ func main() {
 	for {
 		resp := NewResp(conn)
 		value, err := resp.Read()
+		writer := NewWriter(conn)
 		if err != nil {
 			if err == io.EOF {
 				break
@@ -33,6 +34,6 @@ func main() {
 			os.Exit(1)
 		}
 		fmt.Printf("%+v", value)
-		conn.Write([]byte("+OK\r\n"))
+		writer.Write(&Value{typ: "string", str: "OK"})
 	}
 }
