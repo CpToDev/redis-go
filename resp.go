@@ -70,15 +70,15 @@ func (r *Resp) readArray() (Value, error) {
 	if err != nil {
 		return Value{}, err
 	}
-	var bulk_values []Value
+	var arr []Value
 	for i := 0; i < _size; i++ {
 		bulk_value, err := r.Read()
 		if err != nil {
 			return Value{}, err
 		}
-		bulk_values = append(bulk_values, bulk_value)
+		arr = append(arr, bulk_value)
 	}
-	v.arr = bulk_values
+	v.arr = arr
 	return v, nil
 
 }

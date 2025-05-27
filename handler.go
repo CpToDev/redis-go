@@ -1,7 +1,12 @@
 package main
 
 var Handlers = map[string]func([]Value) *Value{
-	"PING": ping,
+	"PING":    ping,
+	"COMMAND": command,
+}
+
+func command(arr []Value) *Value {
+	return &Value{typ: "bulk", bulk: "OK"}
 }
 
 func ping(args []Value) *Value {
