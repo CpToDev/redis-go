@@ -18,7 +18,7 @@ func init() {
 		ForceColors:      true,
 		DisableTimestamp: true,
 	})
-	log.SetLevel(logrus.ErrorLevel)
+	log.SetLevel(logrus.InfoLevel)
 }
 
 func main() {
