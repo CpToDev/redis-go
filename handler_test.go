@@ -50,14 +50,13 @@ func TestPingHandlerWithEmptyArgs(t *testing.T) {
 	if !ok {
 		t.Errorf("command not found in handler")
 	}
-	response := handler(value.arr[1:])
+	response := handler([]Value{})
 	serialized_test_suit := []struct {
 		input  string
 		output string
 	}{
-		{response.typ, "arr"},
-		{strconv.Itoa(len(response.arr)), "1"},
-		{response.arr[0].bulk, "PONG"},
+		{response.typ, "bulk"},
+		{response.bulk, "PONG"},
 	}
 	for _, tt := range serialized_test_suit {
 		if tt.input != tt.output {
