@@ -84,7 +84,6 @@ func TestReadArray(t *testing.T) {
 		if val.typ != "bulk" {
 			t.Errorf("expected %q, got %q", "bulk", value.typ)
 		}
-		fmt.Println(val.bulk)
 	}
 }
 
@@ -92,11 +91,10 @@ func TestRead(t *testing.T) {
 	input := "*3\r\n$5\r\nhello\r\n$0\r\n\r\n$5\r\nworld\r\n"
 	r := strings.NewReader(input)
 	resp := NewResp(r)
-	value, err := resp.Read()
+	_, err := resp.Read()
 	if err != nil {
 		t.Errorf("unexpcted error %v", err)
 	}
-	fmt.Printf("%+v", value)
 }
 
 func TestMarshalString(t *testing.T) {

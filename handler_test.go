@@ -50,14 +50,13 @@ func TestPingHandlerWithEmptyArgs(t *testing.T) {
 	if !ok {
 		t.Errorf("command not found in handler")
 	}
-	response := handler(value.arr[1:])
+	response := handler([]Value{})
 	serialized_test_suit := []struct {
 		input  string
 		output string
 	}{
-		{response.typ, "arr"},
-		{strconv.Itoa(len(response.arr)), "1"},
-		{response.arr[0].bulk, "PONG"},
+		{response.typ, "bulk"},
+		{response.bulk, "PONG"},
 	}
 	for _, tt := range serialized_test_suit {
 		if tt.input != tt.output {
@@ -111,4 +110,42 @@ func TestHandlerWithRawExpression(t *testing.T) {
 		}
 	}
 
+}
+
+func TestSETHandlerHappyPath(t *testing.T) {
+	input_command := "*3\r\n$3\r\rSET\r\n$3\r\nkey\r\n$5\r\nvalue\r\n"
+	resp := NewResp(strings.NewReader(input_command))
+	value, err := resp.Read()
+	if err != nil {
+		t.Errorf("Not expected %+v", err)
+	}
+	test := []struct {
+		input  any
+		output any
+	}{
+		{value.typ, "arr"},
+		{len(value.arr), 3},
+	}
+	for _, tt := range test {
+		if tt.input != tt.output {
+			t.Errorf("exptect %q, got %q", tt.input, tt.output)
+		}
+	}
+	handler, ok := Handlers[value.arr[0].bulk]
+	if !ok {
+		t.Errorf("exptect handler for %q", value.arr[0].bulk)
+	}
+	response := handler(value.arr[1:])
+	test = []struct {
+		input  any
+		output any
+	}{
+		{response.typ, "bulk"},
+		{response.bulk, "OK"},
+	}
+	for _, tt := range test {
+		if tt.input != tt.output {
+			t.Errorf("exptect %q, got %q", tt.input, tt.output)
+		}
+	}
 }
