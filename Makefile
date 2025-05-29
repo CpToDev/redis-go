@@ -7,14 +7,14 @@ all: build
 test:
 	go test 
 
-build:
-	go build -o OUTPUT .
+build: test
+	go build -o $(OUTPUT) 
 
-run: test build
+run: build
 	./$(OUTPUT)
 
 lint:
 	golangci-lint run
 
 clean:
-	rm -f $(APP_NAME)
+	rm -f $(OUTPUT)

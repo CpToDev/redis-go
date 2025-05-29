@@ -79,7 +79,7 @@ func hset(args []Value) *Value {
 
 func hget(args []Value) *Value {
 	if len(args) != 2 {
-		return &Value{typ: "error", str: "Invalud no of arguments, 2 required"}
+		return &Value{typ: "error", str: "Invalid no of arguments, 2 required"}
 	}
 	HSETsMu.RLock()
 	defer HSETsMu.RUnlock()
